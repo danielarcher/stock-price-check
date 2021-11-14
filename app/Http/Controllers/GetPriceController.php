@@ -18,8 +18,8 @@ class GetPriceController extends Controller
         $this->handler = $handler;
     }
 
-    public function search(Request $request): JsonResponse
+    public function check(string $symbol): JsonResponse
     {
-        return $this->handler->handle($request);
+        return $this->handler->handle($symbol);
     }
 }

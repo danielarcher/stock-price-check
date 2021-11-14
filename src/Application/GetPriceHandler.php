@@ -25,8 +25,13 @@ class GetPriceHandler
         $this->service = $service;
     }
 
-    public function handle(Request $request): JsonResponse
+    public function handle(string $symbol): JsonResponse
     {
-        return response()->json([], Response::HTTP_OK); #improvement: create dto object
+        return response()->json([
+            'symbol' => $symbol,
+            'high' => '1234.5678',
+            'low' => '1234.5678',
+            'price' => '1234.5678',
+        ], Response::HTTP_OK); #improvement: create dto object
     }
 }
