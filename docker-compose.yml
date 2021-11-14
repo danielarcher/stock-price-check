@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+    database:
+        image: mysql
+        ports:
+            - 3306:3306
+        environment:
+            - MYSQL_DATABASE=three_price_check
+            - MYSQL_ROOT_PASSWORD=three
