@@ -13,8 +13,11 @@ class CreateStockPriceTable extends Migration
      */
     public function up()
     {
-        Schema::create('stock', function (Blueprint $table) {
-            $table->id();
+        Schema::create('stock_price', function (Blueprint $table) {
+            $table->string('symbol')->primary();
+            $table->string('high');
+            $table->string('low');
+            $table->string('price');
             $table->timestamps();
         });
     }
