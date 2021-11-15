@@ -14,7 +14,8 @@ class CreateStockPriceTable extends Migration
     public function up()
     {
         Schema::create('stock_price', function (Blueprint $table) {
-            $table->string('symbol')->primary();
+            $table->id();
+            $table->string('symbol');
             $table->string('high');
             $table->string('low');
             $table->string('price');

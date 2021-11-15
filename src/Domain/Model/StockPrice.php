@@ -1,54 +1,35 @@
 <?php
 
-namespace ThreePriceChecker\Domain;
+namespace ThreePriceChecker\Domain\Model;
 
-class StockPrice
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Class StockPrice
+ *
+ * @property string symbol
+ * @property string high
+ * @property string low
+ * @property string price
+ * @package ThreePriceChecker\Domain
+ * @method static create(array $array)
+ * @method static firstOrCreate(string[] $array)
+ * @method static find(string $symbol)
+ */
+class StockPrice extends Model
 {
-    private $symbol;
+    protected $table = 'stock_price';
 
-    private $high;
+    protected $fillable = [
+        'symbol',
+        'high',
+        'low',
+        'price',
+    ];
 
-    private $low;
-
-    private $price;
-
-    public function __construct(string $symbol, string $high, string $low, string $price)
-    {
-        $this->symbol = $symbol;
-        $this->high   = $high;
-        $this->low    = $low;
-        $this->price  = $price;
-    }
-
-    /**
-     * @return string
-     */
-    public function symbol()
-    {
-        return $this->symbol;
-    }
-
-    /**
-     * @return string
-     */
-    public function high()
-    {
-        return $this->high;
-    }
-
-    /**
-     * @return string
-     */
-    public function low()
-    {
-        return $this->low;
-    }
-
-    /**
-     * @return string
-     */
-    public function price()
-    {
-        return $this->price;
-    }
+    protected $hidden = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
 }

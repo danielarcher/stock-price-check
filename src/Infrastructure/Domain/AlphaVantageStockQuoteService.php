@@ -2,6 +2,8 @@
 
 namespace ThreePriceChecker\Infrastructure\Domain;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use ThreePriceChecker\Domain\StockQuote;
 use ThreePriceChecker\Domain\StockQuoteService;
 
@@ -11,28 +13,22 @@ class AlphaVantageStockQuoteService implements StockQuoteService
      * @var AlphaVantageStockQuoteTranslator
      */
     private AlphaVantageStockQuoteTranslator $translator;
+    /**
+     * @var Client
+     */
+    private Client $client;
 
-    public function __construct(AlphaVantageStockQuoteTranslator $translator)
+    public function __construct(AlphaVantageStockQuoteTranslator $translator, Client $client)
     {
         $this->translator = $translator;
+        $this->client = $client;
     }
 
     public function get(string $symbol): StockQuote
     {
-        $response = json_decode('{
-            "Global Quote": {
-                "01. symbol": "AMZN",
-                "02. open": "3485.0000",
-                "03. high": "'.mt_rand().'",
-                "04. low": "'.mt_rand().'",
-                "05. price": "'.mt_rand().'",
-                "06. volume": "2636157",
-                "07. latest trading day": "2021-11-12",
-                "08. previous close": "3472.5000",
-                "09. change": "52.6500",
-                "10. change percent": "1.5162%"
-            }
-        }', true);
-        return $this->translator->translate($response);
+        $url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={$symbol}&apikey=0O18XUJW9P8QVGQJ";
+        $body = $this->client->request('GET', $url)->getBody();
+        
+        return $this->translator->translate(json_decode($body,true));
     }
 }

@@ -3,8 +3,8 @@
 namespace ThreePriceChecker\Application;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use ThreePriceChecker\Domain\Exception\StockQuoteNotFound;
 use ThreePriceChecker\Domain\StockPriceRepository;
 use ThreePriceChecker\Domain\StockQuoteService;
 
@@ -22,16 +22,18 @@ class GetPriceHandler
     public function __construct(StockPriceRepository $repository, StockQuoteService $service)
     {
         $this->repository = $repository;
-        $this->service = $service;
+        $this->service    = $service;
     }
 
+    /**
+     * @param string $symbol
+     *
+     * @return JsonResponse
+     * @throws StockQuoteNotFound
+     */
     public function handle(string $symbol): JsonResponse
     {
-        return response()->json([
-            'symbol' => $symbol,
-            'high' => '1234.5678',
-            'low' => '1234.5678',
-            'price' => '1234.5678',
-        ], Response::HTTP_OK); #improvement: create dto object
+        $stockPrice = $this->repository->save($this->service->get($symbol)->toArray());
+        return response()->json($stockPrice->toArray(), Response::HTTP_OK);
     }
 }
