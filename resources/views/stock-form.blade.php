@@ -30,6 +30,9 @@
                 <input class="border w-1/4 border-gray-400 block focus:outline-none focus:border-indigo-800 p-2" x-model="low">
                 <input class="border w-1/4 border-gray-400 block rounded-r focus:outline-none focus:border-indigo-800 p-2" x-model="price">
             </div>
+            <div class="relative">
+                <span class="absolute right-0 text-xs text-gray-500">Currency in USD</span>
+            </div>
         </div>
         <div class="text-center font-semibold text-gray-600 pt-6" x-show="error" x-transition:enter.duration.500ms x-transition:leave.duration.1000ms>
             <p>No stock found for symbol: <span class="font-extrabold text-gray-900" x-text="symbol">1234</span></p>
