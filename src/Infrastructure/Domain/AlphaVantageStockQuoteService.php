@@ -10,6 +10,7 @@ use ThreePriceChecker\Domain\Exception\StockQuoteServiceNotFunctional;
 use ThreePriceChecker\Domain\StockQuote;
 use ThreePriceChecker\Domain\StockQuoteService;
 use ThreePriceChecker\Infrastructure\Exception\CouldNotTranslateResponseException;
+use ThreePriceChecker\Infrastructure\Exception\RequestLimitReachedException;
 
 /**
  * Class AlphaVantageStockQuoteService
@@ -57,7 +58,7 @@ class AlphaVantageStockQuoteService implements StockQuoteService
             $body = $this->client->request('GET', $this->adapter->queryUrl($symbol))->getBody();
 
             return $this->translator->translate(json_decode($body, true));
-        } catch (BadResponseException $exception) {
+        } catch (RequestLimitReachedException | BadResponseException $exception) {
             throw new StockQuoteNotFound($symbol, $exception);
         } catch (GuzzleException | CouldNotTranslateResponseException $exception) {
             throw new StockQuoteServiceNotFunctional($exception);

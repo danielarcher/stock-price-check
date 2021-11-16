@@ -12,18 +12,24 @@ class AlphaVantageAdapter
     /**
      * @var string
      */
-    private string $baseUrl;
+    private $key;
+    /**
+     * @var string
+     */
+    private $host;
+    /**
+     * @var string
+     */
+    private $function;
 
     /**
      * AlphaVantageAdapter constructor.
      */
     public function __construct()
     {
-        $key = config('services.alpha_vantage.key');
-        $host = config('services.alpha_vantage.host');
-        $function = config('services.alpha_vantage.function');
-
-        $this->baseUrl = "{$host}/query?function={$function}&apikey={$key}";
+        $this->key      = config('services.alpha_vantage.key');
+        $this->host     = config('services.alpha_vantage.host');
+        $this->function = config('services.alpha_vantage.function');
     }
 
     /**
@@ -33,6 +39,6 @@ class AlphaVantageAdapter
      */
     public function queryUrl($symbol): string
     {
-        return $this->baseUrl . "&symbol=" . $symbol;
+        return "{$this->host}/query?function={$this->function}&symbol={$symbol}&apikey={$this->key}";
     }
 }

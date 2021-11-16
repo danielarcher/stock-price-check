@@ -1,6 +1,14 @@
 version: '3.7'
 
 services:
+    web:
+        image: lorisleiva/laravel-docker
+        command: php artisan serve --host=0.0.0.0
+        ports:
+            - 8000:8000
+        volumes:
+            - ./:/var/www
+
     database:
         image: mysql
         ports:

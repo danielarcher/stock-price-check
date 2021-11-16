@@ -4,7 +4,9 @@ namespace ThreePriceChecker\Infrastructure\Domain;
 
 use ThreePriceChecker\Domain\StockQuote;
 use ThreePriceChecker\Infrastructure\Exception\CouldNotTranslateResponseException;
+use ThreePriceChecker\Infrastructure\Exception\RequestLimitReachedException;
 use Throwable;
+use function PHPUnit\Framework\arrayHasKey;
 
 /**
  * Class AlphaVantageStockQuoteTranslator
@@ -18,9 +20,14 @@ class AlphaVantageStockQuoteTranslator
      *
      * @return StockQuote
      * @throws CouldNotTranslateResponseException
+     * @throws RequestLimitReachedException
      */
     public function translate(array $response): StockQuote
     {
+        if (array_key_exists('Note', $response)) {
+            throw new RequestLimitReachedException();
+        }
+
         try {
             return new StockQuote(
                 $response['Global Quote']['01. symbol'],
