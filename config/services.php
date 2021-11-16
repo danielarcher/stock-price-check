@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'alpha_vantage' => [
+        'key' => '0O18XUJW9P8QVGQJ',
+        'host' => 'https://www.alphavantage.co',
+        'function' => 'GLOBAL_QUOTE',
+    ]
+
 ];

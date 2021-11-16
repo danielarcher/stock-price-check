@@ -10,7 +10,6 @@ use ThreePriceChecker\Domain\Model\StockPrice;
 
 class SuperSimpleGetPriceController extends Controller
 {
-    const API_KEY = "0O18XUJW9P8QVGQJ";
     /**
      * @var Client
      */
@@ -41,8 +40,11 @@ class SuperSimpleGetPriceController extends Controller
      */
     public function requestStockPrice(string $symbol): array
     {
-        $key  = self::API_KEY;
-        $url  = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={$symbol}&apikey={$key}";
+        $key = config('services.alpha_vantage.key');
+        $host = config('services.alpha_vantage.host');
+        $function = config('services.alpha_vantage.function');
+
+        $url = "{$host}/query?function={$function}&apikey={$key}&symbol={$symbol}";
         $body = $this->client->request('GET', $url)->getBody();
 
         return json_decode($body, true);

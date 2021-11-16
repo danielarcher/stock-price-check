@@ -26,6 +26,10 @@ class AlphaVantageStockQuoteService implements StockQuoteService
      * @var Client
      */
     private Client $client;
+    /**
+     * @var AlphaVantageAdapter
+     */
+    private AlphaVantageAdapter $adapter;
 
     /**
      * AlphaVantageStockQuoteService constructor.
@@ -33,22 +37,24 @@ class AlphaVantageStockQuoteService implements StockQuoteService
      * @param AlphaVantageStockQuoteTranslator $translator
      * @param Client                           $client
      */
-    public function __construct(AlphaVantageStockQuoteTranslator $translator, Client $client)
+    public function __construct(AlphaVantageStockQuoteTranslator $translator, Client $client, AlphaVantageAdapter $adapter)
     {
         $this->translator = $translator;
-        $this->client     = $client;
+        $this->client = $client;
+        $this->adapter = $adapter;
     }
 
     /**
      * @param string $symbol
      *
      * @return StockQuote
+     * @throws StockQuoteNotFound
+     * @throws StockQuoteServiceNotFunctional
      */
     public function get(string $symbol): StockQuote
     {
         try {
-            $url  = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={$symbol}&apikey=0O18XUJW9P8QVGQJ";
-            $body = $this->client->request('GET', $url)->getBody();
+            $body = $this->client->request('GET', $this->adapter->queryUrl($symbol))->getBody();
 
             return $this->translator->translate(json_decode($body, true));
         } catch (BadResponseException $exception) {
