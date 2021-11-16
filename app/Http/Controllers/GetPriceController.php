@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use ThreePriceChecker\Application\GetPriceHandler;
 
 class GetPriceController extends Controller
@@ -20,6 +20,11 @@ class GetPriceController extends Controller
 
     public function check(string $symbol): JsonResponse
     {
-        return $this->handler->handle($symbol);
+        try {
+            $dto = $this->handler->handle($symbol);
+            return response()->json($dto->toArray(), Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([], Response::HTTP_NOT_FOUND);
+        }
     }
 }

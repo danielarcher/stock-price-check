@@ -18,4 +18,17 @@ class StockPriceRepository
 
         return $object;
     }
+
+    public function saveFromStockQuote(StockQuote $quote): StockPrice
+    {
+        $object = StockPrice::create([
+            'symbol' => $quote->symbol(),
+            'high' => $quote->high(),
+            'low' => $quote->low(),
+            'price' => $quote->price(),
+        ]);
+        $object->save();
+
+        return $object;
+    }
 }
