@@ -24,8 +24,8 @@ $ curl localhost:8000/api/check-stock/AMZN
 $ {"symbol":"AMZN","high":"3576.5000","low":"3525.1466","price":"3540.7000"}
 ```
 
+## Visuals
+![application home](app-home.JPG)
 
-##
 ## License
-
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
