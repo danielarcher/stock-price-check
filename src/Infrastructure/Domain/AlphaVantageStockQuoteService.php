@@ -5,6 +5,7 @@ namespace ThreePriceChecker\Infrastructure\Domain;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Http;
 use ThreePriceChecker\Domain\Exception\StockQuoteNotFound;
 use ThreePriceChecker\Domain\Exception\StockQuoteServiceNotFunctional;
 use ThreePriceChecker\Domain\StockQuote;
@@ -24,10 +25,6 @@ class AlphaVantageStockQuoteService implements StockQuoteService
      */
     private AlphaVantageStockQuoteTranslator $translator;
     /**
-     * @var Client
-     */
-    private Client $client;
-    /**
      * @var AlphaVantageAdapter
      */
     private AlphaVantageAdapter $adapter;
@@ -36,12 +33,10 @@ class AlphaVantageStockQuoteService implements StockQuoteService
      * AlphaVantageStockQuoteService constructor.
      *
      * @param AlphaVantageStockQuoteTranslator $translator
-     * @param Client                           $client
      */
-    public function __construct(AlphaVantageStockQuoteTranslator $translator, Client $client, AlphaVantageAdapter $adapter)
+    public function __construct(AlphaVantageStockQuoteTranslator $translator, AlphaVantageAdapter $adapter)
     {
         $this->translator = $translator;
-        $this->client = $client;
         $this->adapter = $adapter;
     }
 
@@ -55,7 +50,7 @@ class AlphaVantageStockQuoteService implements StockQuoteService
     public function get(string $symbol): StockQuote
     {
         try {
-            $body = $this->client->request('GET', $this->adapter->queryUrl($symbol))->getBody();
+            $body = Http::get($this->adapter->queryUrl($symbol))->body();
 
             return $this->translator->translate(json_decode($body, true));
         } catch (RequestLimitReachedException | BadResponseException $exception) {

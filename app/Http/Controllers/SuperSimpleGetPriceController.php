@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use ThreePriceChecker\Domain\Model\StockPrice;
 
 class SuperSimpleGetPriceController extends Controller
@@ -36,7 +37,6 @@ class SuperSimpleGetPriceController extends Controller
      * @param string $symbol
      *
      * @return mixed
-     * @throws GuzzleException
      */
     public function requestStockPrice(string $symbol): array
     {
@@ -45,7 +45,7 @@ class SuperSimpleGetPriceController extends Controller
         $function = config('services.alpha_vantage.function');
 
         $url = "{$host}/query?function={$function}&apikey={$key}&symbol={$symbol}";
-        $body = $this->client->request('GET', $url)->getBody();
+        $body = Http::get($url)->body();
 
         return json_decode($body, true);
     }
